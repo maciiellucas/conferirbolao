@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CONFERÊNCIA | BOLÃO 2025</title>
+    <style>
+        :root {
+            --primary: #00ff88;
+            --primary-glow: rgba(0, 255, 136, 0.2);
+            --dark-bg: #0b0f1a;
+            --card-bg: #161f32;
+            --gold: #f1c40f;
+            --gold-glow: rgba(241, 196, 15, 0.4);
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+            padding: 10px;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; width: 100%; }
+
+        /* --- CABEÇALHO --- */
+        .header {
+            position: relative;
+            background: #111827;
+            padding: 60px 20px;
+            border-radius: 24px;
+            text-align: center;
+            margin-bottom: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 200vmax; height: 200vmax;
+            background: conic-gradient(from 0deg, transparent, var(--primary-glow), transparent 40%);
+            animation: rotate 15s linear infinite;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .header-content { position: relative; z-index: 1; }
+        .header h1 { 
+            font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 900; letter-spacing: -2px;
+            background: linear-gradient(to bottom, #fff 40%, #94a3b8);
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .prize-box {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 15px 35px; border-radius: 100px;
+            border: 1px solid rgba(241, 196, 15, 0.3);
+        }
+
+        .prize-value { font-size: clamp(1.3rem, 4vw, 2.2rem); font-weight: 900; color: var(--gold); display: block; }
+
+        /* --- BUSCA --- */
+        .search-card {
+            background: var(--card-bg); padding: 25px; border-radius: 20px;
+            margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .input-group { display: flex; gap: 12px; max-width: 800px; margin: 0 auto; }
+
+        input[type="text"] {
+            flex: 1; background: #0b0f1a; border: 2px solid #334155;
+            color: white; padding: 18px; border-radius: 14px; font-size: 1.1rem;
+            text-align: center; transition: 0.3s;
+        }
+        input[type="text"]:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 20px var(--primary-glow); }
+
+        .btn-check {
+            background: var(--primary); color: #0b0f1a; border: none;
+            padding: 0 30px; border-radius: 14px; font-weight: 900;
+            cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
+            text-transform: uppercase;
+            min-height: 56px;
+        }
+
+        /* --- STATS --- */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-card {
+            background: var(--card-bg); padding: 20px; border-radius: 20px;
+            text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.5s;
+        }
+
+        .winner-mode { 
+            border-color: var(--gold) !important; 
+            box-shadow: 0 0 25px var(--gold-glow);
+            animation: pulse-gold 2s infinite; 
+        }
+
+        @keyframes pulse-gold {
+            0% { transform: scale(1); box-shadow: 0 0 10px var(--gold-glow); }
+            50% { transform: scale(1.03); box-shadow: 0 0 30px var(--gold-glow); }
+            100% { transform: scale(1); box-shadow: 0 0 10px var(--gold-glow); }
+        }
+
+        .stat-card h4 { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; }
+        .stat-card .val { font-size: 1.1rem; font-weight: 800; }
+
+        /* --- LISTA DE JOGOS --- */
+        .player-card {
+            background: var(--card-bg); border-radius: 22px;
+            padding: 25px 15px; 
+            margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .player-name {
+            font-size: 1.3rem; font-weight: 800; color: var(--primary);
+            margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+            padding-left: 5px;
+        }
+        .player-name::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.05); }
+
+        .games-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 15px;
+            width: 100%;
+        }
+
+        .game-item {
+            background: rgba(0,0,0,0.25); 
+            padding: 15px; 
+            border-radius: 18px;
+            text-align: center; 
+            border: 1px solid rgba(255,255,255,0.03); 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: 0.3s;
+            width: 100%; 
+        }
+
+        .game-winner {
+            border: 2px solid var(--gold) !important;
+            background: rgba(241, 196, 15, 0.1) !important;
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        .balls { 
+            display: flex; 
+            gap: 6px; 
+            justify-content: center; 
+            margin: 10px 0;
+            flex-wrap: wrap; 
+        }
+        
+        .ball {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: #2d3748; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 800;
+            flex-shrink: 0; 
+        }
+
+        .ball.hit { background: var(--primary); color: #000; box-shadow: 0 0 10px rgba(0, 255, 136, 0.4); }
+        .ball.miss { opacity: 0.15; }
+
+        @media (max-width: 768px) {
+            .player-card { padding: 20px 10px; } 
+            .input-group { flex-direction: column; gap: 15px; }
+            .btn-check { padding: 18px; width: 100%; font-size: 1.1rem; }
+            .stats-grid { grid-template-columns: 1fr; gap: 10px; }
+            .games-grid { grid-template-columns: 1fr; gap: 12px; }
+            .game-item { flex-direction: column; padding: 12px 15px; min-height: auto; }
+            .balls { margin: 8px 0; gap: 4px; }
+            .ball { width: 28px; height: 28px; font-size: 0.7rem; }
+        }
+
+        footer { text-align: center; padding: 40px; margin-top: 30px; }
+        .btn-audit {
+            background:none; border:1px solid #334155; color:#555; 
+            padding:8px 20px; border-radius:20px; cursor:pointer; 
+            margin-top:15px; font-size:11px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="header-content">
+            <h1>BOLÃO MEGA DA VIRADA 2025/26</h1>
+            <div class="prize-box">
+                <span class="prize-value">R$ 1.000.000.000,00</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="search-card">
+        <div class="input-group">
+            <input type="text" id="sorteados" placeholder="Ex: 01 02 03 04 05 06" inputmode="search">
+            <button class="btn-check" onclick="conferir()">Conferir Resultado</button>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h4>Cotas Ativas</h4>
+            <div class="val" id="totalPessoas">--</div>
+        </div>
+        <div class="stat-card">
+            <h4>Prêmio p/ Cota</h4>
+            <div class="val" id="premioIndividual" style="color: var(--primary)">R$ 0,00</div>
+        </div>
+        <div class="stat-card" id="cardGanhador">
+            <h4>Jogo Ganhador</h4>
+            <div class="val" id="nomeGanhadores" style="color: var(--gold);">Nenhum</div>
+        </div>
+    </div>
+
+    <div id="displayJogos"></div>
+</div>
+
+<footer>
+    <p style="color: var(--text-dim); font-size: 0.8rem;">&copy; 2025 | Maciel Poppe</p>
+    <button class="btn-audit" onclick="runAudit()">CONFERIR JOGOS REPETIDOS</button>
+</footer>
+
+<script>
+const PREMIO_ESTIMADO = 1000000000;
+const API_URL = "https://script.google.com/macros/s/AKfycbwMY5RXVTOcEdET8i8UNT80bBGvgHNCSo_CTrb0mlHjY6Ni3BmdpGpN3ueTYiBDy-xLMg/exec";
+
+let DADOS_DINAMICOS = [];
+
+async function carregarDados() {
+    const display = document.getElementById('displayJogos');
+    display.innerHTML = "<p style='text-align:center; color:var(--primary); padding:40px;'>Conectando à planilha...</p>";
+
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        let listaFinal = [];
+
+        data.forEach(item => {
+            if (!item.jogos) return;
+
+            // 1. Pega todos os jogos da linha ignorando os separadores (| ou outros)
+            // Divide por qualquer coisa que não seja número ou traço
+            const todosJogosDaLinha = item.jogos.split('|').map(j => 
+                j.trim().split(/[- ]+/).map(Number).filter(n => !isNaN(n) && n > 0)
+            ).filter(j => j.length > 0);
+
+            // 2. Agrupa a cada 5 jogos em uma nova "Cota"
+            for (let i = 0; i < todosJogosDaLinha.length; i += 5) {
+                const fatiaDeJogos = todosJogosDaLinha.slice(i, i + 5);
+                const cotaNumero = (i / 5) + 1;
+                
+                listaFinal.push({
+                    nome: todosJogosDaLinha.length > 5 ? `${item.nome} (${cotaNumero})` : item.nome,
+                    jogos: fatiaDeJogos
+                });
+            }
+        });
+
+        // Ordenar alfabeticamente pelo nome do participante
+        DADOS_DINAMICOS = listaFinal.sort((a, b) => a.nome.localeCompare(b.nome));
+
+        document.getElementById('totalPessoas').innerText = DADOS_DINAMICOS.length;
+        document.getElementById('premioIndividual').innerText = `R$ ${(PREMIO_ESTIMADO / DADOS_DINAMICOS.length).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+        
+        desenhar();
+
+    } catch (error) {
+        console.error("Erro:", error);
+        display.innerHTML = "<p style='text-align:center; color:#ff4444; padding:40px;'>Erro ao carregar dados.</p>";
+    }
+}
+
+function desenhar(sorteados = []) {
+    const container = document.getElementById('displayJogos');
+    container.innerHTML = "";
+    
+    DADOS_DINAMICOS.forEach(p => {
+        let h = `<div class="player-card"><div class="player-name">${p.nome}</div><div class="games-grid">`;
+        p.jogos.forEach((j, i) => {
+            let ac = sorteados.length ? j.filter(n => sorteados.includes(n)).length : 0;
+            let isWinner = (ac === 6);
+            
+            h += `<div class="game-item ${isWinner ? 'game-winner' : ''}">
+                <span style="font-size:0.6rem; color:var(--text-dim); display:block; margin-bottom:5px;">JOGO ${i+1}</span>
+                <div class="balls">
+                    ${j.map(n => `<div class="ball ${sorteados.length ? (sorteados.includes(n) ? 'hit' : 'miss') : ''}">${String(n).padStart(2,'0')}</div>`).join('')}
+                </div>
+                <span style="font-size:0.7rem; color:${ac >= 4 ? 'var(--gold)' : 'var(--primary)'}; font-weight:800;">${ac} ACERTOS</span>
+            </div>`;
+        });
+        container.innerHTML += h + `</div></div>`;
+    });
+}
+
+function conferir() {
+    const raw = document.getElementById('sorteados').value.trim();
+    if(!raw) return;
+    const sorteados = raw.split(/[\s,.-]+/).map(Number).filter(n => n > 0 && n <= 60);
+    if(sorteados.length !== 6) return alert("Insira os 6 números sorteados!");
+    
+    desenhar(sorteados);
+    
+    let nomesGanhadores = [];
+    DADOS_DINAMICOS.forEach(p => {
+        p.jogos.forEach(j => {
+            if(j.filter(n => sorteados.includes(n)).length === 6) {
+                if(!nomesGanhadores.includes(p.nome)) nomesGanhadores.push(p.nome);
+            }
+        });
+    });
+
+    const card = document.getElementById('cardGanhador');
+    if(nomesGanhadores.length > 0) {
+        card.classList.add('winner-mode');
+        document.getElementById('nomeGanhadores').innerText = nomesGanhadores.join(", ");
+    } else {
+        card.classList.remove('winner-mode');
+        document.getElementById('nomeGanhadores').innerText = "Nenhum";
+    }
+}
+
+function runAudit() {
+    let mapaJogos = {};
+    let repetidos = [];
+
+    DADOS_DINAMICOS.forEach(p => {
+        p.jogos.forEach(jogo => {
+            let jogoKey = [...jogo].sort((a, b) => a - b).join('-');
+            if (!mapaJogos[jogoKey]) mapaJogos[jogoKey] = [];
+            mapaJogos[jogoKey].push(p.nome);
+        });
+    });
+
+    for (let key in mapaJogos) {
+        if (mapaJogos[key].length > 1) {
+            let numeros = key.split('-').map(n => n.padStart(2, '0')).join(' ');
+            repetidos.push(`Jogo: [${numeros}]\nParticipantes: ${mapaJogos[key].join(', ')}`);
+        }
+    }
+
+    if (repetidos.length > 0) {
+        alert("⚠️ JOGOS REPETIDOS ENCONTRADOS:\n\n" + repetidos.join('\n\n'));
+    } else {
+        alert("✅✅✅ Nenhum jogo repetido! ✅✅✅");
+    }
+}
+
+carregarDados();
+</script>
+</body>
+</html>
