@@ -251,7 +251,7 @@ let DADOS_DINAMICOS = [];
 
 async function carregarDados() {
     const display = document.getElementById('displayJogos');
-    display.innerHTML = "<p style='text-align:center; color:var(--primary); padding:40px;'>Conectando à planilha...</p>";
+    display.innerHTML = "<p style='text-align:center; color:var(--primary); padding:40px;'>Carregando...</p>";
 
     try {
         const response = await fetch(API_URL);
@@ -372,4 +372,5 @@ function runAudit() {
 carregarDados();
 </script>
 </body>
+
 </html>
